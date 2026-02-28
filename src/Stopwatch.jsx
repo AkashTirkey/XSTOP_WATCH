@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 
-const Stopwatch = () => {
+export default function Stopwatch() {
   const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
-    let intervalId;
+    let interval;
 
     if (isRunning) {
-      intervalId = setInterval(() => {
-        setSeconds(prevSeconds => prevSeconds + 1);
+      interval = setInterval(() => {
+        setSeconds(prev => prev + 1);
       }, 1000);
     }
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(interval);
   }, [isRunning]);
 
   const handleStartStop = () => {
@@ -28,33 +28,24 @@ const Stopwatch = () => {
   const formatTime = () => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
+
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
   return (
-    <div style={styles.container}>
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
       <h1>Stopwatch</h1>
-      <p><strong>Time</strong></p>
-      <h2>{formatTime()}</h2>
 
-      <div>
-        <button onClick={handleStartStop}>
-          {isRunning ? "Stop" : "Start"}
-        </button>
-        <button onClick={handleReset} style={{ marginLeft: "10px" }}>
-          Reset
-        </button>
-      </div>
+    
+      <h2>Time: {formatTime()}</h2>
+
+      <button onClick={handleStartStop}>
+        {isRunning ? "Stop" : "Start"}
+      </button>
+
+      <button onClick={handleReset}>
+        Reset
+      </button>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    textAlign: "center",
-    marginTop: "50px",
-    fontFamily: "Arial"
-  }
-};
-
-export default Stopwatch;
+}
